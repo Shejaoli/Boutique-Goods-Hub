@@ -1,0 +1,291 @@
+ BOUTIQUE COMMODITY SHOP — FULL-STACK WEB APPLICATION PROMPT
+
+📌 OVERVIEW
+Build a complete, professional full-stack commodity shop web application for a boutique store selling everyday goods such as sugar, rice, cooking oil, salt, flour, tomato paste, beans, groundnut oil, and similar items.
+The system has two sides:
+
+A rich, mobile-first customer-facing storefront (inspired by the reference designs: clean mobile grocery app UX from images 2, 3, 4, and 5)
+A powerful admin dashboard for the owner and staff (inspired by the dashboard designs from images 6 and 7)
+An admin login page inspired by the bold curved-background login screen in image 8
+
+
+I will provide product images. All product image slots must accept uploaded images and display them beautifully in product cards, detail pages, and the admin inventory table.
+
+
+🎨 DESIGN SYSTEM
+Color Palette:
+
+Primary: Deep Forest Green #1a5c34
+Accent: Warm Amber/Gold #c87f0a
+Background: Soft Warm Cream #f5f2ed
+Card Background: #ffffff
+Text Primary: #1a1a1a
+Text Secondary: #6b6b6b
+Success: #2d9e5f
+Warning: #e8a020
+Danger: #d94040
+Low Stock Badge: amber
+Out of Stock Badge: red
+In Stock Badge: green
+
+Typography:
+
+Headings: Playfair Display (Google Fonts) — elegant, premium
+Body / UI text: DM Sans (Google Fonts) — clean, modern
+
+UI Style:
+
+Soft shadows on all cards: box-shadow: 0 4px 20px rgba(0,0,0,0.08)
+Rounded corners: border-radius: 16px on cards, 12px on buttons and inputs
+Smooth hover transitions: transition: all 0.25s ease
+Subtle lift on card hover: transform: translateY(-3px)
+Toast notifications for every key action (sale recorded, stock updated, order status changed, etc.)
+Fully responsive: mobile-first, then tablet, then desktop
+
+
+📱 CUSTOMER STOREFRONT (Mobile-First Design — like images 2, 3, 4, 5)
+The storefront must look and feel like a premium grocery mobile app on small screens. On desktop it expands to a full e-commerce layout like image 4 (Farm Shoppe). On mobile it should feel like image 2 (clean card grid, bottom nav) or image 3 (category pills, product rows with + button).
+Header / Navigation
+
+Logo left, search bar center, cart icon + bell icon + profile avatar right
+On mobile: sticky bottom navigation bar with icons for Home, Categories, Cart, Wishlist, Profile (like image 2 and 3)
+Category filter pills horizontally scrollable below the header
+Top info bar: store address/location pin, delivery estimate time
+
+Homepage
+
+Hero banner / promotional carousel with CTA button (like image 4)
+Feature strips: "Quality Products · Easy Online Payment · Fast Doorstep Delivery" (like image 1)
+Category icons grid: scrollable horizontal row with emoji or icon + label (Grains, Oils, Spices, Canned, etc.)
+"New In / Popular Products" section with horizontally scrollable cards
+"Flash Deals / Discounts" section with discount badge overlays
+"Top Selling This Week" product row
+Newsletter subscription input at bottom
+
+Product Grid / Listing Page
+
+Responsive grid (2 columns mobile, 3–4 columns desktop)
+Each product card shows: product image (uploaded by admin), name, unit type, price, star rating, Add to Cart + button (green circle, like image 2), heart Wishlist icon
+Search bar with live filtering
+Category filter tabs
+Price range slider
+Sort by: Price Low-High, High-Low, Most Popular, Newest
+
+Product Detail Page
+
+Large product image (uploaded)
+Name, description, price per unit, unit type, available stock
+Star rating average + written reviews section
+Add to Cart button (large, full-width on mobile, like image 2's "+ 1kg / €2.32" button)
+Add to Wishlist
+Related Products section at bottom
+
+Customer Auth
+
+Register page: name, email, phone, password
+Login page: email + password
+JWT-based session
+
+Customer Profile
+
+Update name, phone, profile picture
+Saved delivery addresses (add/edit/delete)
+Loyalty points balance + redemption
+Order history list with status badges
+Download any order as PDF receipt
+
+Shopping Cart
+
+Persistent cart (saved to DB per user)
+Quantity increment/decrement
+Remove item
+Show subtotal, discount, loyalty deduction, total
+
+Checkout
+
+Step 1: Select Delivery or Pickup
+Step 2: Enter or select saved address
+Step 3: Choose payment method — Cash on Delivery / Bank Transfer / Mobile Money
+Step 4: Apply promo/discount code
+Step 5: Order confirmation page with order number
+
+Order Tracking
+
+Real-time status tracker: Pending → Confirmed → Packed → Out for Delivery → Delivered
+Visual step indicator (like a progress bar with labeled stages)
+Cancel button visible only on Pending status
+
+Post-Delivery Review
+
+After order marked Delivered, customer receives invite to rate + review each product
+Star rating (1–5) + written comment
+
+Wishlist
+
+Full wishlist page with saved products
+Move to Cart button per item
+
+
+🔔 NOTIFICATIONS SYSTEM
+
+Bell icon in header with red badge showing unread count
+Dropdown notification panel with timestamps, action type, and mark-all-as-read button
+Real-time via Socket.io
+
+Notification triggers:
+
+Customer places an order → owner + all staff notified instantly
+Product stock drops below minimum → low-stock alert to owner
+Order status changes → customer notified
+Daily end-of-day auto-summary for owner: total revenue, order count, top-selling product
+
+
+🖥️ ADMIN DASHBOARD (Design like images 6, 7)
+The admin panel must look like the Grocify dashboard (image 6) and FreshCart inventory screen (image 7): clean sidebar navigation, KPI cards at top, charts, recent activity feed on the right, clean white card-based layout, green accent color.
+Admin Login Page (Design like image 8)
+
+Bold two-tone background with large curved shape (deep forest green top section, cream/white bottom)
+Centered login card with pill-shaped input fields
+Username and password fields with icon badges on the left (green circle with white icon)
+"Forgot Password" link
+"Remember Me" checkbox
+Large full-width pill Login button in green
+Shop logo centered above the form
+
+Dashboard Home (like image 6)
+KPI Cards row:
+
+Today's Revenue
+This Week's Revenue
+Total Products
+Total Inventory Value
+Pending Orders
+Low Stock Products
+Total Registered Customers
+Total Expenses This Month
+
+Charts:
+
+7-day revenue bar chart (like image 6's Sales Analytics)
+Payment method breakdown (pie/donut chart)
+Weekly Sales & Orders table (like image 6)
+
+Right sidebar:
+
+Recent Activity feed: order placed, low stock alert, promo code used, out of stock (like image 6's right panel)
+
+Recent Orders list (5 most recent) at bottom of main content
+Sidebar Navigation (like image 6 & 7)
+
+Logo + shop name at top
+Menu items with icons: Dashboard, Orders, Inventory/Products, Customers, Suppliers, Expenses, Staff, Reports, Promo Codes, Settings, Logout
+Active state: green pill background
+Collapsible on mobile
+
+
+📦 INVENTORY MANAGEMENT (Design like image 7)
+
+Top KPI strip: Total Products, Low Stock count, Out of Stock count, Top Category (like image 7)
+Product table columns: Product Image, Name, Category, Stock Level (with mini progress bar + Min label like image 7), Unit Price, Supplier, Status Badge, Actions (···)
+Filter tabs: All Products / In Stock / Low Stock / Out of Stock
+Search bar top right
+Export button top right
+Low stock alert banner at top of page (red/amber) listing all low-stock items with one-click Restock shortcut
+Add New Product button (opens modal or side drawer): name, description, category, price, unit type, minimum stock, upload image
+Edit / Delete product actions
+Import Stock button per product: add quantity, link supplier, note, date
+Export Stock button: remove quantity for damaged/expired/transferred, with reason and note
+QR code generated per product
+
+
+🛍️ ORDER MANAGEMENT
+
+Full orders table: Order ID, Date/Time, Customer Name, Items Count, Total, Payment Method, Delivery Type, Status Badge (color-coded)
+Click order to open detail: change status with one click (triggers customer notification)
+Assign delivery orders to delivery staff member
+Process returns & refunds: reverse sale, auto-return stock, log reason
+
+
+👥 CUSTOMER MANAGEMENT
+
+Customer list: Name, Email, Phone, Registration Date, Total Orders, Total Spent
+Click customer → full profile + order history
+Block / Unblock account toggle
+
+
+🏭 SUPPLIER MANAGEMENT
+
+Add/manage suppliers: name, contact person, phone, address
+Link stock imports to suppliers
+Total amount spent per supplier over time
+
+
+💰 EXPENSE TRACKING
+
+Record expenses: category (rent, electricity, salaries, transport, packaging, other), amount, date, description
+Monthly expense totals shown in reports
+
+
+🏷️ PROMO CODES & DISCOUNTS
+
+Create code: code name, type (% or fixed), value, expiry date, max uses
+Usage counter per code
+
+
+👷 STAFF MANAGEMENT & ACTIVITY LOG
+
+Add staff: name, role (Owner / Staff / Delivery Person), email, PIN
+Role-based access control:
+
+Owner: full access
+Staff: record sales, view inventory, process orders
+Delivery Person: view and update assigned delivery orders only
+
+
+Activity log: every action logged (sales recorded, stock imported/exported, order updated, login times)
+Filter log by staff member or date
+
+
+📊 FINANCIAL REPORTS
+
+Daily revenue bar chart (last 7 days)
+Weekly + monthly revenue line chart
+Profit & Loss statement: Revenue − Expenses
+Top 5 products by quantity sold
+Top 5 products by revenue
+Top 5 customers by spending
+Sales breakdown by category (bar chart + percentages)
+Daily sales diary: each day's revenue + transaction count
+Weekly summary table
+Export all reports to PDF or Excel
+
+
+⚙️ SETTINGS
+
+Set shop name, logo, currency symbol, contact info
+Manage staff accounts
+Configure notification preferences
+Set up branch locations (multi-branch support)
+Export all data (inventory, sales, customers) to Excel backup
+
+
+⚙️ TECHNOLOGY STACK
+LayerTechnologyFrontendReact (with React Router)BackendNode.js + ExpressDatabaseMongoDB (Mongoose)AuthJWT (access + refresh tokens)Real-timeSocket.ioChartsRecharts or Chart.jsPDFjsPDF or PuppeteerExcel ExportSheetJS (xlsx)QR Codesqrcode.reactFile UploadsMulter (product images, profile pictures)
+Folder structure:
+/client        → React frontend
+/server        → Express API
+/shared        → Shared constants/types
+
+🗃️ SEED DATA (Pre-loaded for demo)
+10 Products: Sugar 1kg, Basmati Rice 5kg, Cooking Oil 2L, Table Salt 500g, Wheat Flour 2kg, Tomato Paste 400g, Red Kidney Beans 1kg, Groundnut Oil 1L, Rolled Oats 500g, Black Pepper 100g
+5 Customers: Realistic names, emails, phone numbers, order histories, loyalty points
+3 Staff Members: Owner (full access), Staff (limited), Delivery Person (delivery only) — each with PIN and role
+8 Sales Records: Spread across the last 7 days, varied products and payment methods, varied statuses
+
+🖼️ IMAGE HANDLING
+All product images are uploaded by the admin. The system must:
+
+Accept image uploads per product in the admin panel
+Store uploaded images and serve them via the backend
+Display product images in: product cards, product detail page, cart, orders, inventory table, and reports
+Show a tasteful placeholder (green gradient with product name initial) when no image is uploaded
