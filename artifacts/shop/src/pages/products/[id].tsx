@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useRoute, useLocation } from "wouter";
 import { Star, ShoppingCart, Heart, ArrowLeft, Plus, Minus } from "lucide-react";
-import { useGetProduct, useListProductReviews, useAddToCart, useAddToWishlist, useRemoveFromWishlist, useCreateReview, getGetCartQueryKey, getGetWishlistQueryKey, getListProductReviewsQueryKey, getGetProductQueryKey } from "@workspace/api-client-react";
+import { useGetProduct, useListProductReviews, useAddToWishlist, useRemoveFromWishlist, useCreateReview, getGetWishlistQueryKey, getListProductReviewsQueryKey, getGetProductQueryKey } from "@workspace/api-client-react";
+import { useGetFeaturedProducts } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
+import { useGuestCart } from "@/hooks/use-guest-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ProductImage2 } from "@/components/ProductCard";
 import ProductCard from "@/components/ProductCard";
-import { useGetFeaturedProducts } from "@workspace/api-client-react";
 
 type Product = {
   id: number; name: string; description?: string | null;
@@ -20,12 +20,29 @@ type Product = {
   discountPercent?: number | null; isFeatured?: boolean;
 };
 
+function ProductDetailImage({ imageUrl, name }: { imageUrl?: string | null; name: string }) {
+  const colors: [string, string][] = [
+    ["#e8f5e9", "#1a5c34"],
+    ["#fff3e0", "#c87f0a"],
+    ["#e3f2fd", "#1565c0"],
+    ["#f3e5f5", "#6a1b9a"],
+  ];
+  const [bg, text] = colors[name.charCodeAt(0) % colors.length];
+  if (imageUrl) return <img src={imageUrl} alt={name} className="w-full h-full object-cover" />;
+  return (
+    <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: bg }}>
+      <span className="text-8xl font-serif font-bold" style={{ color: text }}>{name[0]?.toUpperCase()}</span>
+    </div>
+  );
+}
+
 export default function ProductDetailPage() {
   const [, params] = useRoute("/products/:id");
   const [, navigate] = useLocation();
   const { token } = useAuth();
   const { toast } = useToast();
   const qc = useQueryClient();
+  const { addItem } = useGuestCart();
   const id = parseInt(params?.id ?? "0");
   const [qty, setQty] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
@@ -36,7 +53,6 @@ export default function ProductDetailPage() {
   const { data: product, isLoading } = useGetProduct(id, { query: { enabled: id > 0, queryKey: getGetProductQueryKey(id) } });
   const { data: reviews } = useListProductReviews(id, { query: { enabled: id > 0, queryKey: getListProductReviewsQueryKey(id) } });
   const { data: featured } = useGetFeaturedProducts();
-  const addToCart = useAddToCart();
   const addToWishlist = useAddToWishlist();
   const removeFromWishlist = useRemoveFromWishlist();
   const createReview = useCreateReview();
@@ -46,15 +62,15 @@ export default function ProductDetailPage() {
   const relatedProducts = ((featured as { popular?: Product[] } | undefined)?.popular ?? []).filter(rp => rp.id !== id).slice(0, 4);
 
   const handleCart = () => {
-    if (!token) { navigate("/auth/login"); return; }
-    addToCart.mutate({ data: { productId: id, quantity: qty } }, {
-      onSuccess: () => { qc.invalidateQueries({ queryKey: getGetCartQueryKey() }); toast({ title: "Added to cart" }); },
-      onError: () => toast({ title: "Failed to add to cart", variant: "destructive" }),
-    });
+    if (!p) return;
+    for (let i = 0; i < qty; i++) {
+      addItem({ productId: p.id, name: p.name, price: p.price, unit: p.unit, imageUrl: p.imageUrl });
+    }
+    toast({ title: `${p.name} (x${qty}) added to cart` });
   };
 
   const handleWishlist = () => {
-    if (!token) { navigate("/auth/login"); return; }
+    if (!token) { toast({ title: "Sign in to save to wishlist" }); return; }
     if (wishlisted) {
       setWishlisted(false);
       removeFromWishlist.mutate({ productId: id }, { onSuccess: () => qc.invalidateQueries({ queryKey: getGetWishlistQueryKey() }) });
@@ -66,7 +82,7 @@ export default function ProductDetailPage() {
 
   const handleReview = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) { navigate("/auth/login"); return; }
+    if (!token) { toast({ title: "Admin login required to submit reviews" }); return; }
     createReview.mutate({ id, data: { rating, comment } } as Parameters<typeof createReview.mutate>[0], {
       onSuccess: () => {
         qc.invalidateQueries({ queryKey: getListProductReviewsQueryKey(id) });
@@ -97,13 +113,13 @@ export default function ProductDetailPage() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* Image */}
-      <div className="relative aspect-square bg-muted">
-        <ProductImage2 imageUrl={p.imageUrl} name={p.name} />
-        <button onClick={() => navigate("/products")} className="absolute top-4 left-4 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center shadow-sm">
+      <div className="relative aspect-square bg-muted overflow-hidden">
+        <ProductDetailImage imageUrl={p.imageUrl} name={p.name} />
+        <button onClick={() => navigate("/products")} className="absolute top-4 left-4 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-all">
           <ArrowLeft className="w-4 h-4" />
         </button>
         {p.discountPercent && (
-          <span className="absolute top-4 right-4 bg-destructive text-white text-xs font-bold px-2.5 py-1 rounded-full">-{p.discountPercent}%</span>
+          <span className="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">-{p.discountPercent}%</span>
         )}
       </div>
 
@@ -121,7 +137,7 @@ export default function ProductDetailPage() {
           {(p.rating ?? 0) > 0 && (
             <div className="flex items-center gap-2 mt-1.5">
               <div className="flex">
-                {[1,2,3,4,5].map(s => <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(p.rating ?? 0) ? "fill-warning text-warning" : "text-muted-foreground"}`} />)}
+                {[1,2,3,4,5].map(s => <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(p.rating ?? 0) ? "fill-accent text-accent" : "text-muted-foreground"}`} />)}
               </div>
               <span className="text-sm text-muted-foreground">{p.rating?.toFixed(1)} · {p.reviewCount} review{(p.reviewCount ?? 0) !== 1 ? "s" : ""}</span>
             </div>
@@ -170,32 +186,10 @@ export default function ProductDetailPage() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-serif font-bold text-lg">Reviews ({reviewList.length})</h2>
-            {token && (
-              <Button variant="outline" size="sm" className="rounded-xl text-xs" onClick={() => setShowReviewForm(!showReviewForm)}>
-                {showReviewForm ? "Cancel" : "Write a review"}
-              </Button>
-            )}
           </div>
 
-          {showReviewForm && (
-            <form onSubmit={handleReview} className="bg-muted/50 rounded-xl p-4 mb-4 space-y-3">
-              <div>
-                <p className="text-sm font-medium mb-1.5">Your rating</p>
-                <div className="flex gap-1">
-                  {[1,2,3,4,5].map(s => (
-                    <button key={s} type="button" onClick={() => setRating(s)}>
-                      <Star className={`w-6 h-6 ${s <= rating ? "fill-warning text-warning" : "text-muted-foreground"}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <Textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Share your experience..." className="rounded-xl resize-none" rows={3} />
-              <Button type="submit" disabled={createReview.isPending} className="bg-primary text-white rounded-xl">Submit review</Button>
-            </form>
-          )}
-
           {reviewList.length === 0 ? (
-            <p className="text-muted-foreground text-sm py-4 text-center">No reviews yet. Be the first!</p>
+            <p className="text-muted-foreground text-sm py-4 text-center">No reviews yet for this product.</p>
           ) : (
             <div className="space-y-3">
               {reviewList.map(r => (
@@ -203,7 +197,7 @@ export default function ProductDetailPage() {
                   <div className="flex items-center justify-between mb-1">
                     <p className="font-semibold text-sm">{r.customerName}</p>
                     <div className="flex">
-                      {[1,2,3,4,5].map(s => <Star key={s} className={`w-3 h-3 ${s <= r.rating ? "fill-warning text-warning" : "text-muted-foreground"}`} />)}
+                      {[1,2,3,4,5].map(s => <Star key={s} className={`w-3 h-3 ${s <= r.rating ? "fill-accent text-accent" : "text-muted-foreground"}`} />)}
                     </div>
                   </div>
                   {r.comment && <p className="text-muted-foreground text-sm">{r.comment}</p>}

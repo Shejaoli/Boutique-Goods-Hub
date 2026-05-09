@@ -1,29 +1,26 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Grid3X3, ShoppingCart, Heart, User } from "lucide-react";
-import { useGetCart, getGetCartQueryKey } from "@workspace/api-client-react";
-import { useAuth } from "@/hooks/use-auth";
+import { Home, Grid3X3, ShoppingCart, Heart, ClipboardList } from "lucide-react";
+import { useGuestCart } from "@/hooks/use-guest-cart";
 import Header from "./Header";
 
 interface Props { children: ReactNode }
 
 export default function MainLayout({ children }: Props) {
   const [location] = useLocation();
-  const { token } = useAuth();
-  const { data: cart } = useGetCart({ query: { enabled: !!token, queryKey: getGetCartQueryKey() } });
-  const cartCount = cart?.items?.reduce((s: number, i: { quantity: number }) => s + i.quantity, 0) ?? 0;
+  const { count: cartCount } = useGuestCart();
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
     { href: "/products", icon: Grid3X3, label: "Shop" },
     { href: "/cart", icon: ShoppingCart, label: "Cart", badge: cartCount },
     { href: "/wishlist", icon: Heart, label: "Saved" },
-    { href: "/profile", icon: User, label: "Profile" },
+    { href: "/orders", icon: ClipboardList, label: "Orders" },
   ];
 
   return (
     <div className="min-h-screen bg-[#f5f2ed] flex flex-col">
-      <Header cartCount={cartCount} />
+      <Header />
       <main className="flex-1 pb-20 md:pb-6">{children}</main>
 
       {/* Mobile bottom nav */}
@@ -45,9 +42,7 @@ export default function MainLayout({ children }: Props) {
                   <span className={`text-[10px] font-medium transition-colors ${active ? "text-primary font-semibold" : "text-gray-400"}`}>
                     {label}
                   </span>
-                  {active && (
-                    <span className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-primary rounded-full" />
-                  )}
+                  {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-primary rounded-full" />}
                 </button>
               </Link>
             );

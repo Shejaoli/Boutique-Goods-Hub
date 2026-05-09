@@ -6,7 +6,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 
 import NotFound from "@/pages/not-found";
 
-// Customer Pages
+// Customer Pages (no login required)
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/products/[id]";
@@ -15,9 +15,6 @@ import Checkout from "@/pages/checkout";
 import Wishlist from "@/pages/wishlist";
 import Orders from "@/pages/orders";
 import OrderDetail from "@/pages/orders/[id]";
-import Profile from "@/pages/profile";
-import Login from "@/pages/auth/login";
-import Register from "@/pages/auth/register";
 
 // Admin Pages
 import AdminLogin from "@/pages/admin/login";
@@ -39,12 +36,10 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
-      {/* Auth */}
-      <Route path="/auth/login" component={Login} />
-      <Route path="/auth/register" component={Register} />
+      {/* Admin auth only */}
       <Route path="/admin/login" component={AdminLogin} />
 
-      {/* Admin */}
+      {/* Admin panel */}
       <Route path="/admin" nest>
         <AdminLayout>
           <Switch>
@@ -62,7 +57,7 @@ function Router() {
         </AdminLayout>
       </Route>
 
-      {/* Customer */}
+      {/* Customer storefront — no login needed */}
       <Route path="/" nest>
         <MainLayout>
           <Switch>
@@ -74,7 +69,6 @@ function Router() {
             <Route path="/wishlist" component={Wishlist} />
             <Route path="/orders" component={Orders} />
             <Route path="/orders/:id" component={OrderDetail} />
-            <Route path="/profile" component={Profile} />
             <Route component={NotFound} />
           </Switch>
         </MainLayout>

@@ -1,18 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Search, Bell, Heart, LogOut, User, MapPin, Clock } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuSeparator, DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { ShoppingCart, Search, Heart, MapPin, Clock, ShoppingBag } from "lucide-react";
+import { useGuestCart } from "@/hooks/use-guest-cart";
 
-interface Props { cartCount?: number }
-
-export default function Header({ cartCount = 0 }: Props) {
+export default function Header() {
   const [, navigate] = useLocation();
-  const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
+  const { count: cartCount } = useGuestCart();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,17 +53,14 @@ export default function Header({ cartCount = 0 }: Props) {
                   placeholder="Search for products..."
                   className="flex-1 h-10 pl-4 pr-4 border border-gray-200 border-r-0 rounded-l-xl text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary/40 bg-gray-50"
                 />
-                <button
-                  type="submit"
-                  className="h-10 px-4 bg-primary text-white text-sm font-semibold rounded-r-xl hover:bg-primary/90 transition-all flex items-center gap-1.5 flex-shrink-0"
-                >
+                <button type="submit" className="h-10 px-4 bg-primary text-white text-sm font-semibold rounded-r-xl hover:bg-primary/90 transition-all flex items-center gap-1.5 flex-shrink-0">
                   <Search className="w-4 h-4" />
                   <span className="hidden sm:inline">Search</span>
                 </button>
               </div>
             </form>
 
-            {/* Action icons */}
+            {/* Icons */}
             <div className="flex items-center gap-0.5 flex-shrink-0">
               <Link href="/wishlist">
                 <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all hidden md:flex">
@@ -78,7 +69,7 @@ export default function Header({ cartCount = 0 }: Props) {
               </Link>
 
               <Link href="/cart">
-                <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all relative hidden md:flex">
+                <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all relative">
                   <ShoppingCart className="w-5 h-5" />
                   {cartCount > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 bg-accent text-white text-[9px] font-bold min-w-[16px] h-4 flex items-center justify-center rounded-full px-0.5 ring-2 ring-white">
@@ -88,44 +79,12 @@ export default function Header({ cartCount = 0 }: Props) {
                 </button>
               </Link>
 
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="flex items-center gap-2 h-9 px-2 rounded-xl hover:bg-gray-50 transition-all">
-                      <div className="w-7 h-7 bg-primary/15 rounded-full flex items-center justify-center">
-                        <span className="text-primary text-xs font-bold">{user.name[0]}</span>
-                      </div>
-                      <div className="hidden lg:block text-left">
-                        <p className="text-xs font-semibold text-gray-700 leading-tight">{user.name.split(" ")[0]}</p>
-                        <p className="text-[10px] text-gray-400">My Account</p>
-                      </div>
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 rounded-2xl shadow-xl border-gray-100">
-                    <div className="px-3 py-2.5">
-                      <p className="font-semibold text-sm text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-400">{user.email}</p>
-                    </div>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile"><span className="flex items-center gap-2 w-full text-sm"><User className="w-4 h-4" />My Profile</span></Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/orders"><span className="flex items-center gap-2 w-full text-sm"><ShoppingCart className="w-4 h-4" />My Orders</span></Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive">
-                      <LogOut className="w-4 h-4 mr-2" />Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Link href="/auth/login">
-                  <button className="h-9 px-4 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary/90 transition-all shadow-sm">
-                    Sign in
-                  </button>
-                </Link>
-              )}
+              <Link href="/orders">
+                <button className="flex items-center gap-1.5 h-9 px-3 ml-1 bg-primary/8 text-primary text-sm font-semibold rounded-xl hover:bg-primary/15 transition-all hidden md:flex">
+                  <ShoppingBag className="w-4 h-4" />
+                  <span className="text-xs">My Orders</span>
+                </button>
+              </Link>
             </div>
           </div>
         </div>
