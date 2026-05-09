@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Search, Bell, User, Heart, LogOut, Settings } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ShoppingCart, Search, Bell, Heart, LogOut, User, MapPin, Clock } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
@@ -22,82 +20,137 @@ export default function Header({ cartCount = 0 }: Props) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-primary text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3">
-        <div className="flex items-center gap-3">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">G</span>
-            </div>
-            <span className="font-serif text-xl font-bold hidden sm:block">GreenBasket</span>
-          </Link>
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      {/* Top info bar */}
+      <div className="bg-primary hidden md:block">
+        <div className="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between">
+          <div className="flex items-center gap-4 text-white/80 text-xs">
+            <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" />Lagos, Nigeria</span>
+            <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />Delivery: Mon–Sat, 8am–6pm</span>
+          </div>
+          <div className="flex items-center gap-4 text-white/80 text-xs">
+            <span>📞 +234 800 000 0000</span>
+            <span>✉️ hello@greenbasket.ng</span>
+          </div>
+        </div>
+      </div>
 
-          {/* Search */}
-          <form onSubmit={handleSearch} className="flex-1 max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
-              <Input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Search products..."
-                className="pl-9 bg-white text-foreground placeholder:text-muted-foreground rounded-xl border-0 h-9"
-              />
-            </div>
-          </form>
-
-          {/* Actions */}
-          <div className="flex items-center gap-1 flex-shrink-0">
-            <Link href="/wishlist">
-              <Button size="icon" variant="ghost" className="text-white hover:bg-white/20 hidden md:flex">
-                <Heart className="w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="/cart">
-              <Button size="icon" variant="ghost" className="text-white hover:bg-white/20 relative hidden md:flex">
-                <ShoppingCart className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute top-0.5 right-0.5 bg-accent text-white text-[9px] font-bold min-w-[16px] h-4 flex items-center justify-center rounded-full px-0.5">
-                    {cartCount}
-                  </span>
-                )}
-              </Button>
+      {/* Main header */}
+      <div className="border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-3">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+              <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
+                <span className="text-white font-serif font-bold text-base">G</span>
+              </div>
+              <div className="hidden sm:block">
+                <p className="font-serif text-xl font-bold text-primary leading-tight">GreenBasket</p>
+                <p className="text-[10px] text-gray-400 -mt-0.5 leading-none">Fresh & Quality</p>
+              </div>
             </Link>
 
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="icon" variant="ghost" className="text-white hover:bg-white/20">
-                    <div className="w-7 h-7 bg-accent rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">{user.name[0]}</span>
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <div className="px-3 py-2">
-                    <p className="font-semibold text-sm">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
-                  </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile"><span className="flex items-center gap-2 w-full"><User className="w-4 h-4" />Profile</span></Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/orders"><span className="flex items-center gap-2 w-full"><ShoppingCart className="w-4 h-4" />My Orders</span></Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout} className="text-destructive">
-                    <LogOut className="w-4 h-4 mr-2" />Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Link href="/auth/login">
-                <Button size="sm" variant="ghost" className="text-white hover:bg-white/20 border border-white/30">
-                  Sign in
-                </Button>
+            {/* Search bar */}
+            <form onSubmit={handleSearch} className="flex-1 max-w-2xl mx-4">
+              <div className="relative flex">
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search for products..."
+                  className="flex-1 h-10 pl-4 pr-4 border border-gray-200 border-r-0 rounded-l-xl text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-primary/40 bg-gray-50"
+                />
+                <button
+                  type="submit"
+                  className="h-10 px-4 bg-primary text-white text-sm font-semibold rounded-r-xl hover:bg-primary/90 transition-all flex items-center gap-1.5 flex-shrink-0"
+                >
+                  <Search className="w-4 h-4" />
+                  <span className="hidden sm:inline">Search</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Action icons */}
+            <div className="flex items-center gap-0.5 flex-shrink-0">
+              <Link href="/wishlist">
+                <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all hidden md:flex">
+                  <Heart className="w-5 h-5" />
+                </button>
               </Link>
-            )}
+
+              <Link href="/cart">
+                <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all relative hidden md:flex">
+                  <ShoppingCart className="w-5 h-5" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 bg-accent text-white text-[9px] font-bold min-w-[16px] h-4 flex items-center justify-center rounded-full px-0.5 ring-2 ring-white">
+                      {cartCount > 99 ? "99+" : cartCount}
+                    </span>
+                  )}
+                </button>
+              </Link>
+
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 h-9 px-2 rounded-xl hover:bg-gray-50 transition-all">
+                      <div className="w-7 h-7 bg-primary/15 rounded-full flex items-center justify-center">
+                        <span className="text-primary text-xs font-bold">{user.name[0]}</span>
+                      </div>
+                      <div className="hidden lg:block text-left">
+                        <p className="text-xs font-semibold text-gray-700 leading-tight">{user.name.split(" ")[0]}</p>
+                        <p className="text-[10px] text-gray-400">My Account</p>
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 rounded-2xl shadow-xl border-gray-100">
+                    <div className="px-3 py-2.5">
+                      <p className="font-semibold text-sm text-gray-800">{user.name}</p>
+                      <p className="text-xs text-gray-400">{user.email}</p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile"><span className="flex items-center gap-2 w-full text-sm"><User className="w-4 h-4" />My Profile</span></Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/orders"><span className="flex items-center gap-2 w-full text-sm"><ShoppingCart className="w-4 h-4" />My Orders</span></Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive">
+                      <LogOut className="w-4 h-4 mr-2" />Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link href="/auth/login">
+                  <button className="h-9 px-4 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary/90 transition-all shadow-sm">
+                    Sign in
+                  </button>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Category nav bar */}
+      <div className="bg-primary hidden md:block">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
+            {[
+              { label: "All Categories", href: "/products" },
+              { label: "🌾 Grains", href: "/products?category=grains" },
+              { label: "🫙 Oils", href: "/products?category=oils" },
+              { label: "🧂 Condiments", href: "/products?category=condiments" },
+              { label: "🌶️ Spices", href: "/products?category=spices" },
+              { label: "🫘 Legumes", href: "/products?category=legumes" },
+              { label: "⚡ Flash Deals", href: "/products?sort=popular" },
+              { label: "🆕 New Arrivals", href: "/products?sort=newest" },
+            ].map(({ label, href }) => (
+              <Link key={href} href={href}>
+                <span className="flex-shrink-0 text-white/85 hover:text-white hover:bg-white/15 text-xs font-medium px-3 py-2.5 rounded-sm transition-all whitespace-nowrap cursor-pointer">
+                  {label}
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
