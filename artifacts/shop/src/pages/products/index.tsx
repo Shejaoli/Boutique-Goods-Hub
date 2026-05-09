@@ -33,7 +33,7 @@ export default function ProductsPage() {
   const { data: categories } = useListCategories();
 
   const products = (data as { products: Product[]; total: number } | undefined);
-  const cats = (categories as { id: number; name: string }[] | undefined) ?? [];
+  const cats = Array.isArray(categories) ? (categories as { id: number; name: string }[]) : [];
 
   return (
     <div className="max-w-4xl mx-auto p-4">

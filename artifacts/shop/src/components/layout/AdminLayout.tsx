@@ -33,7 +33,7 @@ export default function AdminLayout({ children }: Props) {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: notifications } = useListNotifications({ query: { enabled: !!user, queryKey: getListNotificationsQueryKey() } });
-  const unread = (notifications as { isRead: boolean }[] | undefined)?.filter(n => !n.isRead).length ?? 0;
+  const unread = Array.isArray(notifications) ? (notifications as { isRead: boolean }[]).filter(n => !n.isRead).length : 0;
 
   const handleLogout = () => {
     logout();

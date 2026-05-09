@@ -58,7 +58,7 @@ export default function AdminProductsPage() {
   const adjustStock = useAdjustStock();
 
   const allProducts = ((data as { products?: Product[] } | undefined)?.products ?? []) as Product[];
-  const cats = (categories as { id: number; name: string }[] | undefined) ?? [];
+  const cats = Array.isArray(categories) ? (categories as { id: number; name: string }[]) : [];
   const supps = (suppliers as { id: number; name: string }[] | undefined) ?? [];
 
   const filtered = allProducts.filter(p => {
