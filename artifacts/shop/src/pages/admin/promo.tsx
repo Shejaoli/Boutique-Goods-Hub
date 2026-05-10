@@ -72,7 +72,7 @@ export default function AdminPromoPage() {
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${valid ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"}`}>{valid ? "Active" : "Inactive"}</span>
                   </div>
                   <div className="flex gap-3 mt-0.5 text-xs text-muted-foreground flex-wrap">
-                    <span>{c.type === "percent" ? `${c.value}% off` : `₦${c.value} off`}</span>
+                    <span>{c.type === "percent" ? `${c.value}% off` : `RWF ${c.value} off`}</span>
                     <span>Used: {c.usageCount}{c.maxUses ? `/${c.maxUses}` : ""}</span>
                     {c.expiresAt && <span>Expires: {c.expiresAt}</span>}
                   </div>
@@ -99,7 +99,7 @@ export default function AdminPromoPage() {
                   <SelectTrigger className="mt-1 rounded-xl"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="percent">Percentage (%)</SelectItem>
-                    <SelectItem value="fixed">Fixed Amount (₦)</SelectItem>
+                    <SelectItem value="fixed">Fixed Amount (RWF )</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

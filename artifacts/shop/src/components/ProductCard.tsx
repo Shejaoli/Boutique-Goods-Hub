@@ -117,9 +117,9 @@ export default function ProductCard({ product }: Props) {
 
           <div className="flex items-center justify-between mt-2">
             <div>
-              <span className="font-bold text-primary text-base">₦{product.price.toLocaleString()}</span>
+              <span className="font-bold text-primary text-base">RWF {product.price.toLocaleString()}</span>
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-gray-400 line-through text-xs ml-1.5">₦{product.originalPrice.toLocaleString()}</span>
+                <span className="text-gray-400 line-through text-xs ml-1.5">RWF {product.originalPrice.toLocaleString()}</span>
               )}
             </div>
             <button

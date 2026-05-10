@@ -74,7 +74,7 @@ export default function AdminCustomersPage() {
                     </td>
                     <td className="px-3 py-3 text-muted-foreground hidden md:table-cell">{c.phone ?? "—"}</td>
                     <td className="px-3 py-3 font-semibold">{c.totalOrders}</td>
-                    <td className="px-3 py-3 font-semibold text-primary hidden sm:table-cell">₦{c.totalSpent.toLocaleString()}</td>
+                    <td className="px-3 py-3 font-semibold text-primary hidden sm:table-cell">RWF {c.totalSpent.toLocaleString()}</td>
                     <td className="px-3 py-3 text-muted-foreground hidden lg:table-cell">{new Date(c.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</td>
                     <td className="px-4 py-3 text-right">
                       <Switch checked={c.isBlocked} onCheckedChange={() => handleToggle(c)} className={c.isBlocked ? "data-[state=checked]:bg-destructive" : ""} />

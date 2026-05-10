@@ -36,9 +36,9 @@ export default function AdminReportsPage() {
       {/* P&L Summary */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "7-Day Revenue", value: `₦${totalRevenue.toLocaleString()}`, color: "text-success" },
-          { label: "Month Expenses", value: `₦${totalExpenses.toLocaleString()}`, color: "text-destructive" },
-          { label: "Net Profit", value: `₦${profit.toLocaleString()}`, color: profit >= 0 ? "text-success" : "text-destructive" },
+          { label: "7-Day Revenue", value: `RWF ${totalRevenue.toLocaleString()}`, color: "text-success" },
+          { label: "Month Expenses", value: `RWF ${totalExpenses.toLocaleString()}`, color: "text-destructive" },
+          { label: "Net Profit", value: `RWF ${profit.toLocaleString()}`, color: profit >= 0 ? "text-success" : "text-destructive" },
           { label: "Total Orders", value: String(s?.totalOrders ?? 0), color: "text-primary" },
         ].map(k => (
           <div key={k.label} className="bg-card rounded-xl p-4 border border-border">
@@ -56,8 +56,8 @@ export default function AdminReportsPage() {
             <BarChart data={revenueData} barSize={28}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0ede8" />
               <XAxis dataKey="date" tick={{ fontSize: 11 }} tickFormatter={d => new Date(d).toLocaleDateString("en-GB", { month: "short", day: "numeric" })} />
-              <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `₦${(v / 1000).toFixed(0)}k`} />
-              <Tooltip formatter={(v: number, n: string) => [`₦${v.toLocaleString()}`, n === "revenue" ? "Revenue" : "Orders"]} labelFormatter={d => new Date(d).toLocaleDateString("en-GB", { weekday: "short", month: "short", day: "numeric" })} />
+              <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `RWF ${(v / 1000).toFixed(0)}k`} />
+              <Tooltip formatter={(v: number, n: string) => [`RWF ${v.toLocaleString()}`, n === "revenue" ? "Revenue" : "Orders"]} labelFormatter={d => new Date(d).toLocaleDateString("en-GB", { weekday: "short", month: "short", day: "numeric" })} />
               <Bar dataKey="revenue" fill="#1a5c34" radius={[6, 6, 0, 0]} name="revenue" />
             </BarChart>
           </ResponsiveContainer>
@@ -85,7 +85,7 @@ export default function AdminReportsPage() {
                   <p className="text-sm font-medium truncate">{p.productName}</p>
                   <p className="text-xs text-muted-foreground">{p.quantity} units sold</p>
                 </div>
-                <span className="font-bold text-sm text-primary">₦{p.revenue.toLocaleString()}</span>
+                <span className="font-bold text-sm text-primary">RWF {p.revenue.toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -111,7 +111,7 @@ export default function AdminReportsPage() {
                 {payData.filter(d => d.count > 0).map(d => (
                   <div key={d.method} className="flex justify-between text-sm">
                     <span className="text-muted-foreground capitalize">{d.method.replace(/_/g, " ")}</span>
-                    <span className="font-semibold">₦{d.total.toLocaleString()} ({d.count} orders)</span>
+                    <span className="font-semibold">RWF {d.total.toLocaleString()} ({d.count} orders)</span>
                   </div>
                 ))}
               </div>

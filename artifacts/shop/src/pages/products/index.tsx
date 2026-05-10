@@ -81,7 +81,7 @@ export default function ProductsPage() {
                 </Select>
               </div>
               <div>
-                <p className="text-sm font-semibold mb-2">Price range: ₦{priceRange[0].toLocaleString()} – ₦{priceRange[1].toLocaleString()}</p>
+                <p className="text-sm font-semibold mb-2">Price range: RWF {priceRange[0].toLocaleString()} – RWF {priceRange[1].toLocaleString()}</p>
                 <Slider min={0} max={50000} step={500} value={priceRange} onValueChange={v => setPriceRange(v)} className="mt-2" />
               </div>
             </div>

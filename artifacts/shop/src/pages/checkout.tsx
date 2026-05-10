@@ -167,11 +167,11 @@ export default function CheckoutPage() {
             <div className="space-y-3">
               <div>
                 <Label className="text-xs text-gray-600">Full Name</Label>
-                <Input value={address.name} onChange={e => setAddress(a => ({ ...a, name: e.target.value }))} placeholder="Adaeze Okonkwo" className="mt-1 rounded-xl border-gray-200" />
+                <Input value={address.name} onChange={e => setAddress(a => ({ ...a, name: e.target.value }))} placeholder="Amahoro Uwimana" className="mt-1 rounded-xl border-gray-200" />
               </div>
               <div>
                 <Label className="text-xs text-gray-600">Phone Number</Label>
-                <Input value={address.phone} onChange={e => setAddress(a => ({ ...a, phone: e.target.value }))} placeholder="+234 800 000 0000" className="mt-1 rounded-xl border-gray-200" />
+                <Input value={address.phone} onChange={e => setAddress(a => ({ ...a, phone: e.target.value }))} placeholder="+250 788 000 000" className="mt-1 rounded-xl border-gray-200" />
               </div>
               {deliveryType === "delivery" && (
                 <>
@@ -182,11 +182,11 @@ export default function CheckoutPage() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <Label className="text-xs text-gray-600">City</Label>
-                      <Input value={address.city} onChange={e => setAddress(a => ({ ...a, city: e.target.value }))} placeholder="Lagos" className="mt-1 rounded-xl border-gray-200" />
+                      <Input value={address.city} onChange={e => setAddress(a => ({ ...a, city: e.target.value }))} placeholder="Kigali" className="mt-1 rounded-xl border-gray-200" />
                     </div>
                     <div>
                       <Label className="text-xs text-gray-600">State</Label>
-                      <Input value={address.state} onChange={e => setAddress(a => ({ ...a, state: e.target.value }))} placeholder="Lagos State" className="mt-1 rounded-xl border-gray-200" />
+                      <Input value={address.state} onChange={e => setAddress(a => ({ ...a, state: e.target.value }))} placeholder="Kigali Province" className="mt-1 rounded-xl border-gray-200" />
                     </div>
                   </div>
                 </>
@@ -276,16 +276,16 @@ export default function CheckoutPage() {
             {items.map(item => (
               <div key={item.productId} className="flex justify-between text-sm">
                 <span className="text-gray-500">{item.name} x{item.quantity}</span>
-                <span className="font-medium">₦{(item.price * item.quantity).toLocaleString()}</span>
+                <span className="font-medium">RWF {(item.price * item.quantity).toLocaleString()}</span>
               </div>
             ))}
           </div>
           <div className="border-t border-gray-100 pt-3 space-y-1.5 text-sm mb-4">
-            <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>₦{subtotal.toLocaleString()}</span></div>
+            <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>RWF {subtotal.toLocaleString()}</span></div>
             <div className="flex justify-between"><span className="text-gray-500">Delivery</span><span className="text-green-600 font-medium">Free</span></div>
-            {discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>-₦{discount.toLocaleString()}</span></div>}
+            {discount > 0 && <div className="flex justify-between text-green-600"><span>Discount</span><span>-RWF {discount.toLocaleString()}</span></div>}
             <div className="flex justify-between font-bold text-base border-t border-gray-100 pt-2">
-              <span>Total</span><span className="text-primary">₦{total.toLocaleString()}</span>
+              <span>Total</span><span className="text-primary">RWF {total.toLocaleString()}</span>
             </div>
           </div>
           <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500 mb-3 space-y-1.5 border border-gray-100">
@@ -301,7 +301,7 @@ export default function CheckoutPage() {
           <div className="flex gap-2">
             <Button onClick={() => setStep(2)} variant="outline" className="flex-1 rounded-xl h-11 border-gray-200">Back</Button>
             <Button onClick={handlePlaceOrder} className="flex-1 bg-primary text-white rounded-xl h-11 font-semibold">
-              Place Order · ₦{total.toLocaleString()}
+              Place Order · RWF {total.toLocaleString()}
             </Button>
           </div>
         </div>

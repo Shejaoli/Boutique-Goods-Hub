@@ -136,7 +136,7 @@ router.post("/orders", authenticate, async (req: AuthRequest, res) => {
 
     await db.insert(activityTable).values({
       type: "order_placed",
-      message: `Order #${order.id} placed by ${customer?.name ?? "Customer"} — ₦${total.toFixed(2)}`,
+      message: `Order #${order.id} placed by ${customer?.name ?? "Customer"} — RWF ${total.toFixed(2)}`,
     });
     await db.insert(notificationsTable).values({
       type: "order_placed",

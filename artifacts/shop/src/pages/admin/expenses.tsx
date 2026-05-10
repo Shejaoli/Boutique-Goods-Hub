@@ -58,7 +58,7 @@ export default function AdminExpensesPage() {
         <Input type="month" value={month} onChange={e => setMonth(e.target.value)} className="w-44 rounded-xl" />
         <div className="bg-primary/10 rounded-xl px-4 py-2">
           <span className="text-xs text-muted-foreground">Total this month: </span>
-          <span className="font-bold text-primary">₦{total.toLocaleString()}</span>
+          <span className="font-bold text-primary">RWF {total.toLocaleString()}</span>
         </div>
       </div>
 
@@ -68,7 +68,7 @@ export default function AdminExpensesPage() {
           {byCategory.map(({ cat, total }) => (
             <div key={cat} className="bg-card rounded-xl p-3 border border-border">
               <p className="text-xs text-muted-foreground capitalize mb-0.5">{cat}</p>
-              <p className="font-bold text-sm">₦{total.toLocaleString()}</p>
+              <p className="font-bold text-sm">RWF {total.toLocaleString()}</p>
             </div>
           ))}
         </div>
@@ -94,7 +94,7 @@ export default function AdminExpensesPage() {
                   <tr key={e.id} className="hover:bg-muted/20 transition-colors">
                     <td className="px-4 py-3 font-medium capitalize">{e.category}</td>
                     <td className="px-3 py-3 text-muted-foreground hidden sm:table-cell">{e.description ?? "—"}</td>
-                    <td className="px-3 py-3 font-bold text-primary">₦{Number(e.amount).toLocaleString()}</td>
+                    <td className="px-3 py-3 font-bold text-primary">RWF {Number(e.amount).toLocaleString()}</td>
                     <td className="px-3 py-3 text-muted-foreground">{e.date}</td>
                     <td className="px-4 py-3 text-right">
                       <button onClick={() => handleDelete(e.id)} className="text-destructive hover:opacity-70"><Trash2 className="w-4 h-4" /></button>
@@ -119,7 +119,7 @@ export default function AdminExpensesPage() {
                 <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent>
               </Select>
             </div>
-            <div><Label className="text-xs">Amount (₦) *</Label><Input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} className="mt-1 rounded-xl" /></div>
+            <div><Label className="text-xs">Amount (RWF ) *</Label><Input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: e.target.value }))} className="mt-1 rounded-xl" /></div>
             <div><Label className="text-xs">Description</Label><Input value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} className="mt-1 rounded-xl" /></div>
             <div><Label className="text-xs">Date</Label><Input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="mt-1 rounded-xl" /></div>
             <div className="flex gap-2 pt-1">

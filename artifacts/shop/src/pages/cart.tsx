@@ -61,7 +61,7 @@ export default function CartPage() {
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm text-gray-800 line-clamp-1">{item.name}</p>
               <p className="text-xs text-gray-400">{item.unit}</p>
-              <p className="text-primary font-bold mt-0.5">₦{item.price.toLocaleString()}</p>
+              <p className="text-primary font-bold mt-0.5">RWF {item.price.toLocaleString()}</p>
             </div>
             <div className="flex flex-col items-end justify-between flex-shrink-0">
               <button onClick={() => removeItem(item.productId)} className="text-gray-400 hover:text-destructive transition-colors">
@@ -94,7 +94,7 @@ export default function CartPage() {
           <Input value={promoInput} onChange={e => setPromoInput(e.target.value.toUpperCase())} placeholder="Enter code" className="flex-1 rounded-xl h-9 text-sm uppercase border-gray-200" />
           <Button onClick={handlePromo} variant="outline" className="rounded-xl h-9 text-sm px-4 border-gray-200">Apply</Button>
         </div>
-        {promoDiscount > 0 && <p className="text-green-600 text-xs mt-1.5">Code "{promoCode}" — saving ₦{promoDiscount.toLocaleString()}</p>}
+        {promoDiscount > 0 && <p className="text-green-600 text-xs mt-1.5">Code "{promoCode}" — saving RWF {promoDiscount.toLocaleString()}</p>}
       </div>
 
       {/* Summary */}
@@ -102,7 +102,7 @@ export default function CartPage() {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-gray-500">Subtotal ({count} items)</span>
-            <span className="font-medium">₦{subtotal.toLocaleString()}</span>
+            <span className="font-medium">RWF {subtotal.toLocaleString()}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Delivery</span>
@@ -111,12 +111,12 @@ export default function CartPage() {
           {promoDiscount > 0 && (
             <div className="flex justify-between text-green-600">
               <span>Discount</span>
-              <span>-₦{promoDiscount.toLocaleString()}</span>
+              <span>-RWF {promoDiscount.toLocaleString()}</span>
             </div>
           )}
           <div className="flex justify-between font-bold text-base border-t border-gray-100 pt-2 mt-2">
             <span>Total</span>
-            <span className="text-primary">₦{total.toLocaleString()}</span>
+            <span className="text-primary">RWF {total.toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function CartPage() {
       <Link href={`/checkout?discount=${promoDiscount}`}>
         <Button className="w-full h-12 bg-primary text-white rounded-xl text-base font-semibold shadow-md hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
           <ShoppingCart className="w-4 h-4" />
-          Proceed to Checkout · ₦{total.toLocaleString()}
+          Proceed to Checkout · RWF {total.toLocaleString()}
         </Button>
       </Link>
     </div>

@@ -103,7 +103,7 @@ export default function AdminOrdersPage() {
                           <p className="font-medium">{order.customerName}</p>
                         </td>
                         <td className="px-3 py-3 text-muted-foreground hidden md:table-cell">{order.items.length} item{order.items.length !== 1 ? "s" : ""}</td>
-                        <td className="px-3 py-3 font-bold text-primary">₦{order.total.toLocaleString()}</td>
+                        <td className="px-3 py-3 font-bold text-primary">RWF {order.total.toLocaleString()}</td>
                         <td className="px-3 py-3 text-muted-foreground capitalize hidden sm:table-cell">{order.paymentMethod?.replace(/_/g, " ")}</td>
                         <td className="px-3 py-3">
                           <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${cfg.color}`}>{cfg.label}</span>
@@ -123,7 +123,7 @@ export default function AdminOrdersPage() {
                                 {order.items.map((item, i) => (
                                   <div key={i} className="flex justify-between text-sm py-0.5">
                                     <span>{item.productName} x{item.quantity}</span>
-                                    <span className="font-medium">₦{item.subtotal.toLocaleString()}</span>
+                                    <span className="font-medium">RWF {item.subtotal.toLocaleString()}</span>
                                   </div>
                                 ))}
                               </div>

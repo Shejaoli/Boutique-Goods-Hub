@@ -92,9 +92,9 @@ export default function ProductDetailPage() {
           <p className="text-xs text-muted-foreground uppercase tracking-wide">{p.unit}</p>
           <h1 className="font-serif text-2xl font-bold text-foreground mt-0.5">{p.name}</h1>
           <div className="flex items-center gap-3 mt-2">
-            <span className="text-2xl font-bold text-primary">₦{p.price.toLocaleString()}</span>
+            <span className="text-2xl font-bold text-primary">RWF {p.price.toLocaleString()}</span>
             {p.originalPrice && p.originalPrice > p.price && (
-              <span className="text-muted-foreground line-through">₦{p.originalPrice.toLocaleString()}</span>
+              <span className="text-muted-foreground line-through">RWF {p.originalPrice.toLocaleString()}</span>
             )}
           </div>
           {(p.rating ?? 0) > 0 && (

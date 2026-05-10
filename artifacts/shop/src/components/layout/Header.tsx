@@ -19,12 +19,12 @@ export default function Header() {
       <div className="bg-primary hidden md:block">
         <div className="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between">
           <div className="flex items-center gap-4 text-white/80 text-xs">
-            <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" />Lagos, Nigeria</span>
+            <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" />Kigali, Rwanda</span>
             <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />Delivery: Mon–Sat, 8am–6pm</span>
           </div>
           <div className="flex items-center gap-4 text-white/80 text-xs">
-            <span>📞 +234 800 000 0000</span>
-            <span>✉️ hello@greenbasket.ng</span>
+            <span>📞 +250 788 000 000</span>
+            <span>✉️ hello@greenbasket.rw</span>
           </div>
         </div>
       </div>

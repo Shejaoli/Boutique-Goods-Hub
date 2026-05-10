@@ -231,7 +231,7 @@ export default function AdminProductsPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-3 py-3 font-semibold hidden sm:table-cell">₦{p.price.toLocaleString()}</td>
+                      <td className="px-3 py-3 font-semibold hidden sm:table-cell">RWF {p.price.toLocaleString()}</td>
                       <td className="px-3 py-3">
                         <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${cfg.color}`}>{cfg.label}</span>
                       </td>
@@ -267,8 +267,8 @@ export default function AdminProductsPage() {
             <div><Label className="text-xs">Name *</Label><Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="mt-1 rounded-xl" /></div>
             <div><Label className="text-xs">Description</Label><Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} className="mt-1 rounded-xl resize-none" rows={2} /></div>
             <div className="grid grid-cols-2 gap-3">
-              <div><Label className="text-xs">Price (₦) *</Label><Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="mt-1 rounded-xl" /></div>
-              <div><Label className="text-xs">Original Price (₦)</Label><Input type="number" value={form.originalPrice} onChange={e => setForm(f => ({ ...f, originalPrice: e.target.value }))} className="mt-1 rounded-xl" /></div>
+              <div><Label className="text-xs">Price (RWF ) *</Label><Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="mt-1 rounded-xl" /></div>
+              <div><Label className="text-xs">Original Price (RWF )</Label><Input type="number" value={form.originalPrice} onChange={e => setForm(f => ({ ...f, originalPrice: e.target.value }))} className="mt-1 rounded-xl" /></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>

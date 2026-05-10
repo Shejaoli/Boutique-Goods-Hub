@@ -86,7 +86,7 @@ export default function AdminDashboardPage() {
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <KPICard label="Total Orders" value={String(s?.totalOrders ?? 0)} icon={ShoppingBag} iconBg="bg-emerald-500" sub={`${s?.pendingOrders ?? 0} pending`} trend="10%" trendUp />
-          <KPICard label="Revenue" value={`₦${(s?.weekRevenue ?? 0).toLocaleString()}`} icon={DollarSign} iconBg="bg-blue-500" sub="This week" trend="12%" trendUp />
+          <KPICard label="Revenue" value={`RWF ${(s?.weekRevenue ?? 0).toLocaleString()}`} icon={DollarSign} iconBg="bg-blue-500" sub="This week" trend="12%" trendUp />
           <KPICard label="Total Customers" value={String(s?.totalCustomers ?? 0)} icon={Users} iconBg="bg-amber-400" sub="Registered users" trend="10%" trendUp />
           <KPICard label="Low Stock" value={String(s?.lowStockCount ?? 0)} icon={AlertTriangle} iconBg="bg-rose-500" sub={`${s?.outOfStockCount ?? 0} out of stock`} trend="4%" trendUp={false} />
         </div>
@@ -95,10 +95,10 @@ export default function AdminDashboardPage() {
       {/* Second KPI row */}
       {!statsLoading && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <KPICard label="Today's Revenue" value={`₦${(s?.todayRevenue ?? 0).toLocaleString()}`} icon={TrendingUp} iconBg="bg-primary" sub="Delivered orders" />
+          <KPICard label="Today's Revenue" value={`RWF ${(s?.todayRevenue ?? 0).toLocaleString()}`} icon={TrendingUp} iconBg="bg-primary" sub="Delivered orders" />
           <KPICard label="Total Products" value={String(s?.totalProducts ?? 0)} icon={Package} iconBg="bg-purple-500" sub="In inventory" />
-          <KPICard label="Inventory Value" value={`₦${(s?.inventoryValue ?? 0).toLocaleString()}`} icon={BarChart3} iconBg="bg-teal-500" />
-          <KPICard label="Month Expenses" value={`₦${(s?.monthExpenses ?? 0).toLocaleString()}`} icon={Activity} iconBg="bg-orange-500" />
+          <KPICard label="Inventory Value" value={`RWF ${(s?.inventoryValue ?? 0).toLocaleString()}`} icon={BarChart3} iconBg="bg-teal-500" />
+          <KPICard label="Month Expenses" value={`RWF ${(s?.monthExpenses ?? 0).toLocaleString()}`} icon={Activity} iconBg="bg-orange-500" />
         </div>
       )}
 
@@ -123,10 +123,10 @@ export default function AdminDashboardPage() {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
               <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} tickFormatter={v => `₦${(v / 1000).toFixed(0)}k`} />
+              <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} tickFormatter={v => `RWF ${(v / 1000).toFixed(0)}k`} />
               <Tooltip
                 contentStyle={{ borderRadius: 12, border: "1px solid #f3f4f6", boxShadow: "0 4px 20px rgba(0,0,0,0.08)", fontSize: 12 }}
-                formatter={(v: number) => [`₦${v.toLocaleString()}`, "Revenue"]}
+                formatter={(v: number) => [`RWF ${v.toLocaleString()}`, "Revenue"]}
               />
               <Area type="monotone" dataKey="Revenue" stroke="#1a5c34" strokeWidth={2.5} fill="url(#colorRevenue)" dot={{ fill: "#1a5c34", strokeWidth: 2, r: 4 }} activeDot={{ r: 6 }} />
             </AreaChart>
@@ -158,7 +158,7 @@ export default function AdminDashboardPage() {
                       <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
                       <span className="text-gray-600 text-xs capitalize">{d.method.replace(/_/g, " ")}</span>
                     </div>
-                    <span className="text-xs font-semibold text-gray-800">₦{d.total.toLocaleString()}</span>
+                    <span className="text-xs font-semibold text-gray-800">RWF {d.total.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -197,7 +197,7 @@ export default function AdminDashboardPage() {
                         {new Date(d.date).toLocaleDateString("en-GB", { weekday: "short", month: "short", day: "numeric" })}
                       </td>
                       <td className="px-4 py-3 text-gray-600">{d.orders}</td>
-                      <td className="px-4 py-3 font-semibold text-gray-800">₦{d.revenue.toLocaleString()}</td>
+                      <td className="px-4 py-3 font-semibold text-gray-800">RWF {d.revenue.toLocaleString()}</td>
                       <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{Math.floor(Math.random() * 10) + 20 + i * 5}</td>
                     </tr>
                   ))
