@@ -12,18 +12,18 @@ import { useListNotifications, getListNotificationsQueryKey } from "@workspace/a
 interface Props { children: ReactNode }
 
 const mainNavItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/products", label: "Inventory", icon: Package },
-  { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
-  { href: "/admin/customers", label: "Customers", icon: Users },
-  { href: "/admin/reports", label: "Reports & Analytics", icon: BarChart3 },
+  { href: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "/products", label: "Inventory", icon: Package },
+  { href: "/orders", label: "Orders", icon: ShoppingBag },
+  { href: "/customers", label: "Customers", icon: Users },
+  { href: "/reports", label: "Reports & Analytics", icon: BarChart3 },
 ];
 
 const otherNavItems = [
-  { href: "/admin/suppliers", label: "Suppliers", icon: Truck },
-  { href: "/admin/expenses", label: "Expenses", icon: Receipt },
-  { href: "/admin/staff", label: "Staff", icon: UserCog },
-  { href: "/admin/promo", label: "Promo Codes", icon: Tag },
+  { href: "/suppliers", label: "Suppliers", icon: Truck },
+  { href: "/expenses", label: "Expenses", icon: Receipt },
+  { href: "/staff", label: "Staff", icon: UserCog },
+  { href: "/promo", label: "Promo Codes", icon: Tag },
   { href: "#", label: "Settings", icon: Settings },
   { href: "#", label: "Help / Support", icon: HelpCircle },
 ];
