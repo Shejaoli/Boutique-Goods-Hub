@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Search, MapPin, Clock } from "lucide-react";
+import { ShoppingCart, Search, MapPin, Clock, LayoutDashboard } from "lucide-react";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 
 export default function Header() {
@@ -60,8 +60,13 @@ export default function Header() {
               </div>
             </form>
 
-            {/* Cart icon */}
+            {/* Admin + Cart icons */}
             <div className="flex items-center gap-0.5 flex-shrink-0">
+              <Link href="/admin">
+                <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all" title="Admin Dashboard">
+                  <LayoutDashboard className="w-5 h-5" />
+                </button>
+              </Link>
               <Link href="/cart">
                 <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all relative">
                   <ShoppingCart className="w-5 h-5" />
