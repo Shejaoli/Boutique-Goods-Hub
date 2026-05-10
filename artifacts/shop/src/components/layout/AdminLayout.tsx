@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard, Package, ShoppingBag, Users, Truck,
@@ -30,10 +30,30 @@ const otherNavItems = [
 
 export default function AdminLayout({ children }: Props) {
   const [location, navigate] = useLocation();
-  const { user, logout } = useAuth();
+  const { user, isLoading, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: notifications } = useListNotifications({ query: { enabled: !!user, queryKey: getListNotificationsQueryKey() } });
   const unread = Array.isArray(notifications) ? (notifications as { isRead: boolean }[]).filter(n => !n.isRead).length : 0;
+
+  // Auth guard — redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !user) {
+      navigate("/admin/login");
+    }
+  }, [isLoading, user]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-gray-400">Checking access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   const handleLogout = () => {
     logout();
