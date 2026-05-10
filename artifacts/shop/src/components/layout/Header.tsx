@@ -23,7 +23,7 @@ export default function Header() {
             <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />Delivery: Mon–Sat, 8am–6pm</span>
           </div>
           <div className="flex items-center gap-4 text-white/80 text-xs">
-            <span>📞 +250 788 000 000</span>
+            <span>📞 +250 780 405 259</span>
             <span>✉️ hello@greenbasket.rw</span>
           </div>
         </div>
