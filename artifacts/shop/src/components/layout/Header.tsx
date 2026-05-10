@@ -24,7 +24,7 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-4 text-white/80 text-xs">
             <a href="https://wa.me/250780405259" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">📞 +250 780 405 259</a>
-            <span>✉️ hello@greenbasket.rw</span>
+            <span>✉️ hello@isoko.com</span>
           </div>
         </div>
       </div>
@@ -36,10 +36,10 @@ export default function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
               <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
-                <span className="text-white font-serif font-bold text-base">G</span>
+                <span className="text-white font-serif font-bold text-base">I</span>
               </div>
               <div className="hidden sm:block">
-                <p className="font-serif text-xl font-bold text-primary leading-tight">GreenBasket</p>
+                <p className="font-serif text-xl font-bold text-primary leading-tight">ISOKO</p>
                 <p className="text-[10px] text-gray-400 -mt-0.5 leading-none">Fresh & Quality</p>
               </div>
             </Link>

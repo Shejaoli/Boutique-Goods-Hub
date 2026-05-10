@@ -86,10 +86,10 @@ export default function AdminLayout({ children }: Props) {
       <div className="p-5 border-b border-gray-100">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
-            <span className="text-white font-bold text-sm">G</span>
+            <span className="text-white font-bold text-sm">I</span>
           </div>
           <div>
-            <p className="font-serif font-bold text-gray-900 text-lg leading-tight">GreenBasket</p>
+            <p className="font-serif font-bold text-gray-900 text-lg leading-tight">ISOKO</p>
             <p className="text-gray-400 text-xs">Admin Portal</p>
           </div>
         </div>

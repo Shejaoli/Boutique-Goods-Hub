@@ -7,12 +7,12 @@ import {
 import bcrypt from "bcryptjs";
 
 async function seed() {
-  console.log("Seeding GreenBasket database...");
+  console.log("Seeding ISOKO database...");
 
   // Admin user
-  const adminHash = await bcrypt.hash("admin123", 10);
+  const adminHash = await bcrypt.hash("admin@isoko1!2@", 10);
   const [admin] = await db.insert(usersTable).values({
-    name: "GreenBasket Admin", email: "admin@greenbasket.com",
+    name: "ISOKO Admin", email: "admin@isoko.com",
     passwordHash: adminHash, role: "owner",
   }).onConflictDoNothing().returning();
 

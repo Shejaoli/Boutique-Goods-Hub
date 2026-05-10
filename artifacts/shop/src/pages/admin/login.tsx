@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
           <div className="w-8 h-8 rounded-full bg-emerald-400 shadow-md" />
           <div className="w-8 h-8 rounded-full bg-amber-300 shadow-md" />
         </div>
-        <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase">GreenBasket Admin</p>
+        <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase">ISOKO Admin</p>
       </div>
 
       {/* Main card */}
@@ -115,7 +115,7 @@ export default function AdminLoginPage() {
           <p className="mt-4 text-sm font-semibold text-primary/70 tracking-wide text-center">
             Secure Admin Access
           </p>
-          <p className="text-xs text-gray-400 text-center mt-1">GreenBasket Management Portal</p>
+          <p className="text-xs text-gray-400 text-center mt-1">ISOKO Management Portal</p>
         </div>
 
         {/* Vertical divider */}
@@ -184,7 +184,7 @@ export default function AdminLoginPage() {
           {/* Demo credentials hint */}
           <div className="mt-4 bg-primary/5 border border-primary/15 rounded-xl px-4 py-2.5 text-center">
             <p className="text-[11px] text-gray-500">
-              <span className="font-semibold text-primary">Demo:</span> admin@greenbasket.com / admin123
+              <span className="font-semibold text-primary">Demo:</span> admin@isoko.com / admin@isoko1!2@
             </p>
           </div>
 

@@ -1,4 +1,4 @@
-# GreenBasket
+# ISOKO
 
 A full-stack Nigerian boutique commodity shop — mobile-first storefront with cart, wishlist, checkout, orders, and reviews; plus a complete admin dashboard with inventory, orders, customers, suppliers, expenses, staff, promo codes, and reports.
 
@@ -48,7 +48,7 @@ A full-stack Nigerian boutique commodity shop — mobile-first storefront with c
 
 ## Demo Credentials
 
-- **Admin**: admin@greenbasket.com / admin123
+- **Admin**: admin@isoko.com / admin@isoko1!2@
 - **Customer**: amaka@example.com / test1234
 
 ## Design
