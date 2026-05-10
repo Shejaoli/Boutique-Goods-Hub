@@ -40,13 +40,13 @@ waitForPort = 5000
 name = "API Server"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "PORT=8080 pnpm --filter @workspace/api-server run dev"
 waitForPort = 8080
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [agent]
 stack = "BEST_EFFORT_FALLBACK"
@@ -67,3 +67,7 @@ externalPort = 3001
 [[ports]]
 localPort = 24349
 externalPort = 3000
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
