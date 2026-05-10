@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, Grid3X3, ShoppingCart, Heart, ClipboardList } from "lucide-react";
+import { Home, Grid3X3, ShoppingCart } from "lucide-react";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 import Header from "./Header";
 
@@ -14,8 +14,6 @@ export default function MainLayout({ children }: Props) {
     { href: "/", icon: Home, label: "Home" },
     { href: "/products", icon: Grid3X3, label: "Shop" },
     { href: "/cart", icon: ShoppingCart, label: "Cart", badge: cartCount },
-    { href: "/wishlist", icon: Heart, label: "Saved" },
-    { href: "/orders", icon: ClipboardList, label: "Orders" },
   ];
 
   return (

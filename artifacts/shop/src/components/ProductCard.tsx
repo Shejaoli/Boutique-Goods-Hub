@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Heart, Plus, Star } from "lucide-react";
-import { useAddToWishlist, useRemoveFromWishlist, getGetWishlistQueryKey } from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/use-auth";
+import { Plus, Star } from "lucide-react";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 import { useToast } from "@/hooks/use-toast";
 
@@ -23,7 +20,6 @@ interface Product {
 
 interface Props {
   product: Product;
-  wishlisted?: boolean;
 }
 
 function PlaceholderImage({ name }: { name: string }) {
@@ -42,16 +38,10 @@ function PlaceholderImage({ name }: { name: string }) {
   );
 }
 
-export default function ProductCard({ product, wishlisted: initialWishlisted = false }: Props) {
-  const { token } = useAuth();
+export default function ProductCard({ product }: Props) {
   const { toast } = useToast();
-  const qc = useQueryClient();
   const { addItem } = useGuestCart();
-  const [wishlisted, setWishlisted] = useState(initialWishlisted);
   const [adding, setAdding] = useState(false);
-
-  const addToWishlist = useAddToWishlist();
-  const removeFromWishlist = useRemoveFromWishlist();
 
   const handleCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -66,28 +56,6 @@ export default function ProductCard({ product, wishlisted: initialWishlisted = f
     });
     toast({ title: `${product.name} added to cart` });
     setTimeout(() => setAdding(false), 600);
-  };
-
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!token) {
-      toast({ title: "Sign in to save to wishlist" });
-      return;
-    }
-    if (wishlisted) {
-      setWishlisted(false);
-      removeFromWishlist.mutate({ productId: product.id }, {
-        onSuccess: () => qc.invalidateQueries({ queryKey: getGetWishlistQueryKey() }),
-        onError: () => setWishlisted(true),
-      });
-    } else {
-      setWishlisted(true);
-      addToWishlist.mutate({ data: { productId: product.id } }, {
-        onSuccess: () => qc.invalidateQueries({ queryKey: getGetWishlistQueryKey() }),
-        onError: () => setWishlisted(false),
-      });
-    }
   };
 
   const outOfStock = product.status === "out_of_stock";
@@ -112,14 +80,6 @@ export default function ProductCard({ product, wishlisted: initialWishlisted = f
               <span className="bg-white text-gray-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">Out of Stock</span>
             </div>
           )}
-          <button
-            onClick={handleWishlist}
-            className={`absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-sm ${
-              wishlisted ? "bg-rose-500 text-white" : "bg-white text-gray-400 hover:text-rose-400 opacity-0 group-hover:opacity-100"
-            }`}
-          >
-            <Heart className="w-3.5 h-3.5" fill={wishlisted ? "currentColor" : "none"} />
-          </button>
         </div>
 
         {/* Info */}

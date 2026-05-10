@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { useRoute, useLocation } from "wouter";
-import { Star, ShoppingCart, Heart, ArrowLeft, Plus, Minus } from "lucide-react";
-import { useGetProduct, useListProductReviews, useAddToWishlist, useRemoveFromWishlist, useCreateReview, getGetWishlistQueryKey, getListProductReviewsQueryKey, getGetProductQueryKey } from "@workspace/api-client-react";
-import { useGetFeaturedProducts } from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/use-auth";
+import { Star, ShoppingCart, ArrowLeft, Plus, Minus } from "lucide-react";
+import { useGetProduct, useListProductReviews, useGetFeaturedProducts, getListProductReviewsQueryKey, getGetProductQueryKey } from "@workspace/api-client-react";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import ProductCard from "@/components/ProductCard";
 
@@ -39,23 +35,14 @@ function ProductDetailImage({ imageUrl, name }: { imageUrl?: string | null; name
 export default function ProductDetailPage() {
   const [, params] = useRoute("/products/:id");
   const [, navigate] = useLocation();
-  const { token } = useAuth();
   const { toast } = useToast();
-  const qc = useQueryClient();
   const { addItem } = useGuestCart();
   const id = parseInt(params?.id ?? "0");
   const [qty, setQty] = useState(1);
-  const [wishlisted, setWishlisted] = useState(false);
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState("");
-  const [showReviewForm, setShowReviewForm] = useState(false);
 
   const { data: product, isLoading } = useGetProduct(id, { query: { enabled: id > 0, queryKey: getGetProductQueryKey(id) } });
   const { data: reviews } = useListProductReviews(id, { query: { enabled: id > 0, queryKey: getListProductReviewsQueryKey(id) } });
   const { data: featured } = useGetFeaturedProducts();
-  const addToWishlist = useAddToWishlist();
-  const removeFromWishlist = useRemoveFromWishlist();
-  const createReview = useCreateReview();
 
   const p = product as Product | undefined;
   const reviewList = (reviews as { id: number; customerName: string; rating: number; comment?: string | null; createdAt: string }[] | undefined) ?? [];
@@ -67,30 +54,6 @@ export default function ProductDetailPage() {
       addItem({ productId: p.id, name: p.name, price: p.price, unit: p.unit, imageUrl: p.imageUrl });
     }
     toast({ title: `${p.name} (x${qty}) added to cart` });
-  };
-
-  const handleWishlist = () => {
-    if (!token) { toast({ title: "Sign in to save to wishlist" }); return; }
-    if (wishlisted) {
-      setWishlisted(false);
-      removeFromWishlist.mutate({ productId: id }, { onSuccess: () => qc.invalidateQueries({ queryKey: getGetWishlistQueryKey() }) });
-    } else {
-      setWishlisted(true);
-      addToWishlist.mutate({ data: { productId: id } }, { onSuccess: () => qc.invalidateQueries({ queryKey: getGetWishlistQueryKey() }) });
-    }
-  };
-
-  const handleReview = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!token) { toast({ title: "Admin login required to submit reviews" }); return; }
-    createReview.mutate({ id, data: { rating, comment } } as Parameters<typeof createReview.mutate>[0], {
-      onSuccess: () => {
-        qc.invalidateQueries({ queryKey: getListProductReviewsQueryKey(id) });
-        setComment(""); setShowReviewForm(false);
-        toast({ title: "Review submitted" });
-      },
-      onError: () => toast({ title: "Failed to submit review", variant: "destructive" }),
-    });
   };
 
   if (isLoading) return (
@@ -155,7 +118,7 @@ export default function ProductDetailPage() {
           <p className="text-muted-foreground text-sm leading-relaxed">{p.description}</p>
         )}
 
-        {/* Qty + Actions */}
+        {/* Qty + Add to Cart */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-muted rounded-xl p-1">
             <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-8 h-8 flex items-center justify-center rounded-lg bg-card hover:bg-card/80 transition-all">
@@ -174,12 +137,6 @@ export default function ProductDetailPage() {
             <ShoppingCart className="w-4 h-4" />
             {outOfStock ? "Out of Stock" : "Add to Cart"}
           </Button>
-          <button
-            onClick={handleWishlist}
-            className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all ${wishlisted ? "bg-destructive border-destructive text-white" : "border-border hover:border-destructive hover:text-destructive"}`}
-          >
-            <Heart className="w-4 h-4" fill={wishlisted ? "currentColor" : "none"} />
-          </button>
         </div>
 
         {/* Reviews */}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Search, Heart, MapPin, Clock, ShoppingBag } from "lucide-react";
+import { ShoppingCart, Search, MapPin, Clock } from "lucide-react";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 
 export default function Header() {
@@ -60,14 +60,8 @@ export default function Header() {
               </div>
             </form>
 
-            {/* Icons */}
+            {/* Cart icon */}
             <div className="flex items-center gap-0.5 flex-shrink-0">
-              <Link href="/wishlist">
-                <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all hidden md:flex">
-                  <Heart className="w-5 h-5" />
-                </button>
-              </Link>
-
               <Link href="/cart">
                 <button className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-primary hover:bg-primary/8 transition-all relative">
                   <ShoppingCart className="w-5 h-5" />
@@ -76,13 +70,6 @@ export default function Header() {
                       {cartCount > 99 ? "99+" : cartCount}
                     </span>
                   )}
-                </button>
-              </Link>
-
-              <Link href="/orders">
-                <button className="flex items-center gap-1.5 h-9 px-3 ml-1 bg-primary/8 text-primary text-sm font-semibold rounded-xl hover:bg-primary/15 transition-all hidden md:flex">
-                  <ShoppingBag className="w-4 h-4" />
-                  <span className="text-xs">My Orders</span>
                 </button>
               </Link>
             </div>
