@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: Props) {
   // Auth guard — redirect to login if not authenticated
   useEffect(() => {
     if (!isLoading && !user) {
-      navigate("/admin/login");
+      navigate("~/admin/login");
     }
   }, [isLoading, user]);
 
@@ -57,7 +57,7 @@ export default function AdminLayout({ children }: Props) {
 
   const handleLogout = () => {
     logout();
-    navigate("/admin/login");
+    navigate("~/admin/login");
   };
 
   const isActive = (href: string, exact?: boolean) =>
