@@ -23,6 +23,7 @@ export default function ProductsPage() {
   const queryParams = {
     search: search || undefined,
     category: category ? parseInt(category) : undefined,
+    sort: sort || undefined,
     minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
     maxPrice: priceRange[1] < 50000 ? priceRange[1] : undefined,
     page,

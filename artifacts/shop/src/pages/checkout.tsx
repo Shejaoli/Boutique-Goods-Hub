@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Check, ChevronRight, MapPin, CreditCard, Package, ShoppingBag } from "lucide-react";
+import { Check, ChevronRight, MapPin, CreditCard, Package, ShoppingBag, Clock, RefreshCw } from "lucide-react";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const STEPS = ["Delivery", "Address", "Payment", "Review"];
+
 const PAYMENT_METHODS = [
   { value: "cash_on_delivery", label: "Cash on Delivery", desc: "Pay when your order arrives", icon: Package },
   { value: "bank_transfer", label: "Bank Transfer", desc: "Transfer to our account", icon: CreditCard },
   { value: "mobile_money", label: "Mobile Money", desc: "Pay with your mobile wallet", icon: CreditCard },
+];
+
+const TIME_SLOTS = [
+  { value: "08:00-12:00", label: "8:00 AM – 12:00 PM", desc: "Morning delivery" },
+  { value: "12:00-16:00", label: "12:00 PM – 4:00 PM", desc: "Afternoon delivery" },
+  { value: "16:00-20:00", label: "4:00 PM – 8:00 PM", desc: "Evening delivery" },
+];
+
+const PICKUP_SLOTS = [
+  { value: "09:00-11:00", label: "9:00 AM – 11:00 AM" },
+  { value: "11:00-13:00", label: "11:00 AM – 1:00 PM" },
+  { value: "13:00-15:00", label: "1:00 PM – 3:00 PM" },
+  { value: "15:00-17:00", label: "3:00 PM – 5:00 PM" },
 ];
 
 export default function CheckoutPage() {
@@ -23,6 +37,8 @@ export default function CheckoutPage() {
 
   const [step, setStep] = useState(0);
   const [deliveryType, setDeliveryType] = useState("delivery");
+  const [timeSlot, setTimeSlot] = useState("08:00-12:00");
+  const [allowSubstitution, setAllowSubstitution] = useState(true);
   const [address, setAddress] = useState({ name: "", phone: "", street: "", city: "", state: "" });
   const [paymentMethod, setPaymentMethod] = useState("cash_on_delivery");
   const [orderRef] = useState(`GB-${Date.now().toString(36).toUpperCase()}`);
@@ -30,6 +46,9 @@ export default function CheckoutPage() {
 
   const discount = initialDiscount;
   const total = Math.max(0, subtotal - discount);
+
+  const slots = deliveryType === "delivery" ? TIME_SLOTS : PICKUP_SLOTS;
+  const selectedSlotLabel = slots.find(s => s.value === timeSlot)?.label ?? timeSlot;
 
   const handlePlaceOrder = () => {
     clearCart();
@@ -54,7 +73,11 @@ export default function CheckoutPage() {
       <h2 className="font-serif text-2xl font-bold text-gray-900 mb-2">Order Placed!</h2>
       <p className="text-gray-500 text-sm mb-1">Your order reference is</p>
       <p className="font-bold text-primary text-lg mb-1">#{orderRef}</p>
-      <p className="text-gray-400 text-xs mb-6">We'll contact you on <strong>{address.phone}</strong> to confirm delivery.</p>
+      <div className="bg-gray-50 rounded-xl p-3 w-full mb-4 text-xs text-gray-500 text-left space-y-1 border border-gray-100">
+        <p><span className="font-semibold text-gray-700">Contact:</span> {address.phone}</p>
+        <p><span className="font-semibold text-gray-700">Slot:</span> {selectedSlotLabel}</p>
+        {allowSubstitution && <p className="text-green-600 font-medium">✓ Substitution allowed for out-of-stock items</p>}
+      </div>
       <div className="w-full space-y-2">
         <Button onClick={() => navigate("/")} className="w-full bg-primary text-white rounded-xl h-11">Continue Shopping</Button>
         <Button onClick={() => navigate("/products")} variant="outline" className="w-full rounded-xl h-11">Browse More Products</Button>
@@ -80,70 +103,142 @@ export default function CheckoutPage() {
         ))}
       </div>
 
-      {/* Step 0: Delivery type */}
+      {/* Step 0: Delivery type + time slot */}
       {step === 0 && (
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-          <h2 className="font-semibold mb-4 text-gray-800">How would you like to receive your order?</h2>
-          <div className="space-y-3">
-            {[
-              { value: "delivery", label: "Home Delivery", desc: "Get it delivered to your address" },
-              { value: "pickup", label: "Store Pickup", desc: "Pick up from our store — free!" },
-            ].map(opt => (
-              <button key={opt.value} onClick={() => setDeliveryType(opt.value)} className={`w-full p-4 rounded-xl border-2 text-left transition-all ${deliveryType === opt.value ? "border-primary bg-primary/5" : "border-gray-100"}`}>
-                <p className="font-semibold text-sm text-gray-800">{opt.label}</p>
-                <p className="text-gray-400 text-xs mt-0.5">{opt.desc}</p>
-              </button>
-            ))}
+        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-5">
+          <div>
+            <h2 className="font-semibold mb-3 text-gray-800">How would you like to receive your order?</h2>
+            <div className="space-y-2">
+              {[
+                { value: "delivery", label: "Home Delivery", desc: "Get it delivered to your address" },
+                { value: "pickup", label: "Store Pickup", desc: "Pick up from our store — free!" },
+              ].map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={() => { setDeliveryType(opt.value); setTimeSlot(opt.value === "delivery" ? "08:00-12:00" : "09:00-11:00"); }}
+                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${deliveryType === opt.value ? "border-primary bg-primary/5" : "border-gray-100"}`}
+                >
+                  <p className="font-semibold text-sm text-gray-800">{opt.label}</p>
+                  <p className="text-gray-400 text-xs mt-0.5">{opt.desc}</p>
+                </button>
+              ))}
+            </div>
           </div>
-          <Button onClick={() => setStep(1)} className="w-full mt-5 bg-primary text-white rounded-xl h-11 flex items-center justify-center gap-2">
+
+          {/* Time slot selection */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Clock className="w-4 h-4 text-primary" />
+              <h2 className="font-semibold text-gray-800">
+                {deliveryType === "delivery" ? "Preferred Delivery Time" : "Pickup Time Slot"}
+              </h2>
+            </div>
+            <div className="space-y-2">
+              {slots.map(slot => (
+                <button
+                  key={slot.value}
+                  onClick={() => setTimeSlot(slot.value)}
+                  className={`w-full p-3.5 rounded-xl border-2 text-left flex items-center justify-between transition-all ${timeSlot === slot.value ? "border-primary bg-primary/5" : "border-gray-100 hover:border-gray-200"}`}
+                >
+                  <div>
+                    <p className="font-semibold text-sm text-gray-800">{slot.label}</p>
+                    {"desc" in slot && <p className="text-gray-400 text-xs mt-0.5">{(slot as { desc: string }).desc}</p>}
+                  </div>
+                  {timeSlot === slot.value && <Check className="w-4 h-4 text-primary flex-shrink-0" />}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Button onClick={() => setStep(1)} className="w-full bg-primary text-white rounded-xl h-11 flex items-center justify-center gap-2">
             Continue <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
       )}
 
-      {/* Step 1: Contact + Address */}
+      {/* Step 1: Contact + Address + Substitution */}
       {step === 1 && (
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-          <h2 className="font-semibold mb-4 flex items-center gap-2 text-gray-800">
-            <MapPin className="w-4 h-4 text-primary" />
-            {deliveryType === "delivery" ? "Delivery Details" : "Your Contact Info"}
-          </h2>
-          <div className="space-y-3">
-            <div>
-              <Label className="text-xs text-gray-600">Full Name</Label>
-              <Input value={address.name} onChange={e => setAddress(a => ({ ...a, name: e.target.value }))} placeholder="Adaeze Okonkwo" className="mt-1 rounded-xl border-gray-200" />
-            </div>
-            <div>
-              <Label className="text-xs text-gray-600">Phone Number</Label>
-              <Input value={address.phone} onChange={e => setAddress(a => ({ ...a, phone: e.target.value }))} placeholder="+234 800 000 0000" className="mt-1 rounded-xl border-gray-200" />
-            </div>
-            {deliveryType === "delivery" && (
-              <>
-                <div>
-                  <Label className="text-xs text-gray-600">Street Address</Label>
-                  <Input value={address.street} onChange={e => setAddress(a => ({ ...a, street: e.target.value }))} placeholder="123 Market Street" className="mt-1 rounded-xl border-gray-200" />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-xs text-gray-600">City</Label>
-                    <Input value={address.city} onChange={e => setAddress(a => ({ ...a, city: e.target.value }))} placeholder="Lagos" className="mt-1 rounded-xl border-gray-200" />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-600">State</Label>
-                    <Input value={address.state} onChange={e => setAddress(a => ({ ...a, state: e.target.value }))} placeholder="Lagos State" className="mt-1 rounded-xl border-gray-200" />
-                  </div>
-                </div>
-              </>
-            )}
-            {deliveryType === "pickup" && (
-              <div className="bg-primary/5 rounded-xl p-3 text-sm text-gray-600 border border-primary/15">
-                Come to our store with your order reference to pick up your items. We'll have it ready within 2 hours.
+        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-5">
+          <div>
+            <h2 className="font-semibold mb-4 flex items-center gap-2 text-gray-800">
+              <MapPin className="w-4 h-4 text-primary" />
+              {deliveryType === "delivery" ? "Delivery Details" : "Your Contact Info"}
+            </h2>
+            <div className="space-y-3">
+              <div>
+                <Label className="text-xs text-gray-600">Full Name</Label>
+                <Input value={address.name} onChange={e => setAddress(a => ({ ...a, name: e.target.value }))} placeholder="Adaeze Okonkwo" className="mt-1 rounded-xl border-gray-200" />
               </div>
-            )}
+              <div>
+                <Label className="text-xs text-gray-600">Phone Number</Label>
+                <Input value={address.phone} onChange={e => setAddress(a => ({ ...a, phone: e.target.value }))} placeholder="+234 800 000 0000" className="mt-1 rounded-xl border-gray-200" />
+              </div>
+              {deliveryType === "delivery" && (
+                <>
+                  <div>
+                    <Label className="text-xs text-gray-600">Street Address</Label>
+                    <Input value={address.street} onChange={e => setAddress(a => ({ ...a, street: e.target.value }))} placeholder="123 Market Street" className="mt-1 rounded-xl border-gray-200" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs text-gray-600">City</Label>
+                      <Input value={address.city} onChange={e => setAddress(a => ({ ...a, city: e.target.value }))} placeholder="Lagos" className="mt-1 rounded-xl border-gray-200" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-600">State</Label>
+                      <Input value={address.state} onChange={e => setAddress(a => ({ ...a, state: e.target.value }))} placeholder="Lagos State" className="mt-1 rounded-xl border-gray-200" />
+                    </div>
+                  </div>
+                </>
+              )}
+              {deliveryType === "pickup" && (
+                <div className="bg-primary/5 rounded-xl p-3 text-sm text-gray-600 border border-primary/15">
+                  Come to our store with your order reference. We'll have it ready within 2 hours.
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex gap-2 mt-5">
+
+          {/* Substitution preference */}
+          <div className="border border-gray-100 rounded-xl p-4">
+            <div className="flex items-start gap-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${allowSubstitution ? "bg-primary/10" : "bg-gray-100"}`}>
+                <RefreshCw className={`w-5 h-5 ${allowSubstitution ? "text-primary" : "text-gray-400"}`} />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-sm text-gray-800">Item Substitution</p>
+                <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">
+                  If an item is out of stock, would you like us to substitute it with the closest available alternative?
+                </p>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => setAllowSubstitution(true)}
+                    className={`flex-1 py-2 rounded-lg text-xs font-semibold border-2 transition-all ${allowSubstitution ? "border-primary bg-primary text-white" : "border-gray-100 text-gray-500"}`}
+                  >
+                    Yes, substitute
+                  </button>
+                  <button
+                    onClick={() => setAllowSubstitution(false)}
+                    className={`flex-1 py-2 rounded-lg text-xs font-semibold border-2 transition-all ${!allowSubstitution ? "border-destructive bg-destructive text-white" : "border-gray-100 text-gray-500"}`}
+                  >
+                    No, cancel item
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
             <Button onClick={() => setStep(0)} variant="outline" className="flex-1 rounded-xl h-11 border-gray-200">Back</Button>
-            <Button onClick={() => { if (!address.name || !address.phone) { toast({ title: "Please enter your name and phone", variant: "destructive" }); return; } setStep(2); }} className="flex-1 bg-primary text-white rounded-xl h-11">Continue</Button>
+            <Button
+              onClick={() => {
+                if (!address.name || !address.phone) { toast({ title: "Please enter your name and phone", variant: "destructive" }); return; }
+                setStep(2);
+              }}
+              className="flex-1 bg-primary text-white rounded-xl h-11"
+            >
+              Continue
+            </Button>
           </div>
         </div>
       )}
@@ -193,11 +288,15 @@ export default function CheckoutPage() {
               <span>Total</span><span className="text-primary">₦{total.toLocaleString()}</span>
             </div>
           </div>
-          <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500 mb-4 space-y-1 border border-gray-100">
+          <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500 mb-3 space-y-1.5 border border-gray-100">
             <p><span className="font-semibold text-gray-700">Name:</span> {address.name}</p>
             <p><span className="font-semibold text-gray-700">Phone:</span> {address.phone}</p>
-            <p><span className="font-semibold text-gray-700">Delivery:</span> {deliveryType === "delivery" ? `${address.street}, ${address.city}, ${address.state}` : "Store Pickup"}</p>
+            <p><span className="font-semibold text-gray-700">Method:</span> {deliveryType === "delivery" ? `Home Delivery — ${address.street}, ${address.city}` : "Store Pickup"}</p>
+            <p className="flex items-center gap-1"><span className="font-semibold text-gray-700"><Clock className="w-3 h-3 inline mr-0.5" />Time Slot:</span> {selectedSlotLabel}</p>
             <p><span className="font-semibold text-gray-700">Payment:</span> {PAYMENT_METHODS.find(m => m.value === paymentMethod)?.label}</p>
+            <p className={allowSubstitution ? "text-green-600 font-medium" : "text-orange-500 font-medium"}>
+              {allowSubstitution ? "✓ Substitution allowed if item is out of stock" : "✗ Cancel item if out of stock"}
+            </p>
           </div>
           <div className="flex gap-2">
             <Button onClick={() => setStep(2)} variant="outline" className="flex-1 rounded-xl h-11 border-gray-200">Back</Button>

@@ -16,6 +16,7 @@ interface Product {
   status?: string;
   discountPercent?: number | null;
   categoryName?: string | null;
+  stockQuantity?: number | null;
 }
 
 interface Props {
@@ -59,6 +60,7 @@ export default function ProductCard({ product }: Props) {
   };
 
   const outOfStock = product.status === "out_of_stock";
+  const lowStock = product.status === "low_stock";
 
   return (
     <Link href={`/products/${product.id}`}>
@@ -70,11 +72,22 @@ export default function ProductCard({ product }: Props) {
           ) : (
             <PlaceholderImage name={product.name} />
           )}
-          {product.discountPercent && (
+
+          {/* Discount badge */}
+          {product.discountPercent && !outOfStock && (
             <span className="absolute top-2 left-2 bg-accent text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
               -{product.discountPercent}%
             </span>
           )}
+
+          {/* Low stock badge */}
+          {lowStock && !outOfStock && (
+            <span className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+              Low Stock
+            </span>
+          )}
+
+          {/* Out of stock overlay */}
           {outOfStock && (
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
               <span className="bg-white text-gray-700 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">Out of Stock</span>
