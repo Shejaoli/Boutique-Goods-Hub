@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Plus, AlertTriangle, Package, TrendingDown, X } from "lucide-react";
+import { Search, Plus, AlertTriangle, Package, TrendingDown, X, Upload, Camera } from "lucide-react";
 import {
   useListProducts, useListCategories, useListSuppliers, useCreateProduct,
   useUpdateProduct, useDeleteProduct, useAdjustStock,
@@ -85,15 +85,22 @@ export default function AdminProductsPage() {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !token) return;
+    if (file.size > 55 * 1024 * 1024) {
+      toast({ title: "File too large. Maximum size is 55 MB.", variant: "destructive" });
+      e.target.value = "";
+      return;
+    }
     setUploadingImage(true);
     const fd = new FormData();
     fd.append("file", file);
     try {
       const res = await fetch("/api/upload/image", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
-      const data = await res.json();
-      setForm(f => ({ ...f, imageUrl: data.url }));
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setForm(f => ({ ...f, imageUrl: json.url }));
     } catch { toast({ title: "Image upload failed", variant: "destructive" }); }
     setUploadingImage(false);
+    e.target.value = "";
   };
 
   const handleSave = () => {
@@ -296,14 +303,46 @@ export default function AdminProductsPage() {
             </div>
             <div>
               <Label className="text-xs">Product Image</Label>
-              <div className="mt-1 flex gap-2">
-                <Input value={form.imageUrl} onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))} placeholder="Image URL or upload below" className="rounded-xl flex-1" />
+              <div className="mt-1">
+                {form.imageUrl ? (
+                  <div className="relative">
+                    <img src={form.imageUrl} alt="Preview" className="w-full h-44 rounded-xl object-cover border border-border" />
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, imageUrl: "" }))}
+                      className="absolute top-2 right-2 w-7 h-7 bg-black/60 text-white rounded-full flex items-center justify-center hover:bg-black/80 transition-all"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                    {uploadingImage && (
+                      <div className="absolute inset-0 rounded-xl bg-black/40 flex items-center justify-center">
+                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className={`flex flex-col items-center justify-center gap-2 h-28 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 cursor-pointer hover:bg-primary/10 transition-all ${uploadingImage ? "opacity-50 pointer-events-none" : ""}`}>
+                      <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                      {uploadingImage ? (
+                        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Upload className="w-6 h-6 text-primary/60" />
+                      )}
+                      <span className="text-xs text-primary/70 font-medium text-center leading-tight">
+                        {uploadingImage ? "Uploading…" : "Upload File"}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">Max 55 MB</span>
+                    </label>
+                    <label className={`flex flex-col items-center justify-center gap-2 h-28 rounded-xl border-2 border-dashed border-accent/40 bg-accent/5 cursor-pointer hover:bg-accent/10 transition-all ${uploadingImage ? "opacity-50 pointer-events-none" : ""}`}>
+                      <input type="file" accept="image/*" capture="environment" onChange={handleImageUpload} className="hidden" />
+                      <Camera className="w-6 h-6 text-accent/70" />
+                      <span className="text-xs text-accent/70 font-medium text-center leading-tight">Take Photo</span>
+                      <span className="text-[10px] text-muted-foreground">Use Camera</span>
+                    </label>
+                  </div>
+                )}
               </div>
-              <label className="mt-2 flex items-center gap-2 text-xs text-primary cursor-pointer hover:underline">
-                <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-                {uploadingImage ? "Uploading..." : "Upload image file"}
-              </label>
-              {form.imageUrl && <img src={form.imageUrl} alt="Preview" className="mt-2 w-16 h-16 rounded-xl object-cover border border-border" />}
             </div>
             <div className="flex gap-2 pt-2">
               <Button variant="outline" className="flex-1 rounded-xl" onClick={() => setShowAddModal(false)}>Cancel</Button>
