@@ -12,18 +12,18 @@ import { useListNotifications, getListNotificationsQueryKey } from "@workspace/a
 interface Props { children: ReactNode }
 
 const mainNavItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/products", label: "Inventory", icon: Package },
-  { href: "/orders", label: "Orders", icon: ShoppingBag },
-  { href: "/customers", label: "Customers", icon: Users },
-  { href: "/reports", label: "Reports & Analytics", icon: BarChart3 },
+  { href: "~/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { href: "~/admin/products", label: "Inventory", icon: Package },
+  { href: "~/admin/orders", label: "Orders", icon: ShoppingBag },
+  { href: "~/admin/customers", label: "Customers", icon: Users },
+  { href: "~/admin/reports", label: "Reports & Analytics", icon: BarChart3 },
 ];
 
 const otherNavItems = [
-  { href: "/suppliers", label: "Suppliers", icon: Truck },
-  { href: "/expenses", label: "Expenses", icon: Receipt },
-  { href: "/staff", label: "Staff", icon: UserCog },
-  { href: "/promo", label: "Promo Codes", icon: Tag },
+  { href: "~/admin/suppliers", label: "Suppliers", icon: Truck },
+  { href: "~/admin/expenses", label: "Expenses", icon: Receipt },
+  { href: "~/admin/staff", label: "Staff", icon: UserCog },
+  { href: "~/admin/promo", label: "Promo Codes", icon: Tag },
   { href: "#", label: "Settings", icon: Settings },
   { href: "#", label: "Help / Support", icon: HelpCircle },
 ];
@@ -60,8 +60,11 @@ export default function AdminLayout({ children }: Props) {
     navigate("~/admin/login");
   };
 
-  const isActive = (href: string, exact?: boolean) =>
-    exact ? location === href : (href !== "#" && location.startsWith(href));
+  const isActive = (href: string, exact?: boolean) => {
+    if (href === "#") return false;
+    const path = href.startsWith("~/admin") ? (href.slice(7) || "/") : href;
+    return exact ? location === path : location.startsWith(path);
+  };
 
   const NavItem = ({ href, label, icon: Icon, exact }: { href: string; label: string; icon: React.ComponentType<{className?: string}>; exact?: boolean }) => {
     const active = isActive(href, exact);
